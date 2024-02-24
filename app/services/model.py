@@ -1,11 +1,13 @@
-from langchain_openai import ChatOpenAI
-from langchain_core.runnables import ConfigurableField
-from dotenv import load_dotenv
 import os
 from pathlib import Path
 
+from dotenv import load_dotenv
+from langchain_core.runnables import ConfigurableField
+from langchain_openai import ChatOpenAI
 
-load_dotenv(Path(__file__).parent / ".env")
+load_dotenv(".env")
+
+# TODO: Add the model name and temperature to environment variables, have a mode for testing.
 llm = ChatOpenAI(
     openai_api_key=os.getenv("OPENAI_API_KEY"),
     model_name="gpt-4-0125-preview",
