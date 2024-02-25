@@ -1,5 +1,14 @@
+import json
+
 from langchain.prompts import PromptTemplate
-from outputparser import SchemaInferenceParser
+from app.services.schema_inference.outputparser import SchemaInferenceParser, type_map
+
+type_map_str = (
+    json.dumps({k: k for k in type_map.keys()})
+    .replace('": "', '": ')
+    .replace('", ', ", ")
+    .replace('"}', "}")
+)
 
 schema_inference_template = """From the give text:
 {data}
@@ -9,17 +18,7 @@ return a pydantic model of the data it should be in the format to feed into this
 
 follow this type map, this is what the coverter uses:
 
-type_map = {{
-    "str": str,
-    "int": int,
-    "float": float,
-    "bool": bool,
-    "List[str]": List[str],
-    "List[int]": List[int],
-    "List[float]": List[float],
-    "List[bool]": List[bool],
-    "List[dict]": List[dict],
-}}
+type_map = {type_map_str}
 
 
 {instructions}
@@ -35,7 +34,8 @@ schema_inference_prompt = PromptTemplate(
     input_variables=["data", "instructions"],
     template=schema_inference_template,
     partial_variables={
-        "format_instructions": SchemaInferenceParser().get_format_instructions()
+        "format_instructions": SchemaInferenceParser().get_format_instructions(),
+        "type_map_str": type_map_str,
     },
 )
 
