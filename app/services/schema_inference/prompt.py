@@ -19,7 +19,6 @@ type_map = {{
     "List[float]": List[float],
     "List[bool]": List[bool],
     "List[dict]": List[dict],
-    # Add more mappings as necessary
 }}
 
 
