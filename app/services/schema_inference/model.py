@@ -14,12 +14,12 @@ llm = ChatOpenAI(
     temperature=0.0,
 ).configurable_fields(
     temperature=ConfigurableField(
-        id="llm_temperature",
+        id="temperature",
         name="LLM Temperature",
         description="The temperature of the LLM",
     ),
     model_name=ConfigurableField(
-        id="llm_model_name",
+        id="model",
         name="LLM Model Name",
         description="The name of the LLM model",
     ),
