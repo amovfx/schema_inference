@@ -17,21 +17,18 @@ class SchemaInferenceModel(BaseModel):
     fields: List[FieldModel] = Field(description="The fields of the Pydantic Class")
 
 
-# Function to map type strings to actual Python types
-def str_to_type(type_str: str) -> Type:
-    type_map = {
-        "str": str,
-        "int": int,
-        "float": float,
-        "bool": bool,
-        "List[str]": List[str],
-        "List[int]": List[int],
-        "List[float]": List[float],
-        "List[bool]": List[bool],
-        "List[dict]": List[dict],
-        # Add more mappings as necessary
-    }
-    return type_map.get(type_str, str)  # Default to str if type is unknown
+type_map = {
+    "str": str,
+    "int": int,
+    "float": float,
+    "bool": bool,
+    "List[str]": List[str],
+    "List[int]": List[int],
+    "List[float]": List[float],
+    "List[bool]": List[bool],
+    "List[dict]": List[dict],
+    # Add more mappings as necessary
+}
 
 
 class SchemaInferenceParser(JsonOutputParser):
@@ -47,7 +44,7 @@ class SchemaInferenceParser(JsonOutputParser):
         _meta = SchemaInferenceModel(**meta)
         fields = {
             field.name: (
-                str_to_type(field.type),
+                type_map.get(field.type, str),
                 Field(default=..., description=field.description),
             )
             for field in _meta.fields
